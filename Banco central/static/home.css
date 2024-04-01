@@ -1,0 +1,43 @@
+
+.body_id{
+    padding: 0;
+    background-color: aliceblue;
+}
+
+.header_id{
+    text-align: center;
+}
+
+.bemvindo_id{
+    text-align: center;
+}
+
+.atalhos_id{
+    text-align: center;
+    margin-top: 15em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center ;
+}
+
+.section_atalho_id{
+    text-align: center;
+    margin: 0 5em;
+    background-color: #b7b7b7;
+    padding: 1em;
+    border-radius: 0.7em;
+}
+
+.link_template{
+    text-align: center;
+    color: black;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+
+
+
+
+
+
