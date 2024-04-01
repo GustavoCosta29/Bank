@@ -1,20 +1,13 @@
 import sqlite3
 
 
-
-def registar_cadastro(nome, endereco, contribuinte, senha, confirmar_senha):
+def registar_cadastro(nome, endereco, contribuinte, senha):
     try:
 
         banco = sqlite3.connect('bancodedados.db')
         cursor = banco.cursor()
 
-        if nome:
-            pass
-        if endereco:
-            pass
-        if contribuinte:
-            pass
-        if senha == confirmar_senha:
+        if nome and endereco and contribuinte and senha:
             pass
         else:
             print('erro na validação dos dados, verifique se está corretamente!')
@@ -27,5 +20,3 @@ def registar_cadastro(nome, endereco, contribuinte, senha, confirmar_senha):
     except:
         print('erro')
         return False
-
-

@@ -2,7 +2,6 @@ from flask import Flask, render_template, redirect, url_for, request
 from cadastro import registar_cadastro
 from login import validar_cadastro
 
-
 app = Flask(__name__)
 
 
@@ -13,6 +12,7 @@ def home():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+
     if request.method == 'POST':
         req = request.form
 
@@ -30,8 +30,10 @@ def login():
 
     return render_template("login.html")
 
+
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
+
     if request.method == 'POST':
         req = request.form
 
@@ -41,12 +43,14 @@ def cadastro():
         senha = req['senha']
         confirmar_senha = req['confirmar_senha']
 
-        validacao_registar = registar_cadastro(nome, endereco, contribuinte, senha, confirmar_senha)
-
-        if validacao_registar:
-            return redirect('/login')
+        if senha == confirmar_senha:
+            validacao_registar = registar_cadastro(nome, endereco, contribuinte, senha)
+            if validacao_registar:
+                return redirect('/login')
+            else:
+                return redirect('/cadastro')
         else:
-            return redirect('/cadastro')
+            print('erro ao verificar as passwords')
     else:
         print('erro ao cadastrar')
 
