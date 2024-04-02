@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request
 from cadastro import registar_cadastro
-from login import validar_cadastro
+from login import validar_cadastro, alterar_cadastro
 from flask_restful import Resource, Api
 
 app = Flask(__name__)
@@ -12,7 +12,7 @@ def home():
     return render_template('home.html')
 
 
-class TodoSimple(Resource):
+class Banco_login(Resource):
 
     def post(self):
         req = request.json
@@ -23,19 +23,35 @@ class TodoSimple(Resource):
         validacao_login = validar_cadastro(email, senha)
 
         if validacao_login:
-            return { "logged_in": True }
+            return {"logged_in": True}
         else:
-            return { "logged_in": False }
+            return {"logged_in": False}
+
+    def put(self):
+        req = request.json
+
+        email = req['email']
+        nova_senha = req['nova_senha']
+        confirmar_nova_senha = req['confirmar_nova_senha']
+
+        if nova_senha == confirmar_nova_senha:
+            validacao_nova_senha = alterar_cadastro(email, nova_senha)
+            if validacao_nova_senha:
+                return {"changed_password": True}
+            else:
+                return {"changed_password": False}
+        else:
+            print('Falha na alteração da nova senha')
 
 
-api.add_resource(TodoSimple, '/login')
+api.add_resource(Banco_login, '/login')
 
 
-"""@app.route('/cadastro', methods=['GET', 'POST'])
-def cadastro():
+class Banco_registro(Resource):
 
-    if request.method == 'POST':
-        req = request.form
+    def post(self):
+
+        req = request.json
 
         nome = req['nome']
         endereco = req['endereco']
@@ -46,20 +62,19 @@ def cadastro():
         if senha == confirmar_senha:
             validacao_registar = registar_cadastro(nome, endereco, contribuinte, senha)
             if validacao_registar:
-                return redirect('/login')
+                return {"registered_in": True}
             else:
-                return redirect('/cadastro')
+                return {"registered_in": False}
         else:
             print('erro ao verificar as passwords')
-    else:
-        print('erro ao cadastrar')
 
-    return render_template('cadastro.html')
+
+api.add_resource(Banco_registro, '/cadastro')
 
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')"""
+    return render_template('dashboard.html')
 
 
 if __name__ == '__main__':
