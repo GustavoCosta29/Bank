@@ -4,6 +4,8 @@ from flask_restful import Resource, Api
 from cadastro import registar_cadastro
 from login import validar_cadastro, alterar_cadastro
 from conta import open_account
+from transacao import transation
+from transacao import consulta_saldo
 
 import random
 
@@ -92,22 +94,36 @@ class Conta_cliente(Resource):
             print('contribuinte não cadastrado')
 
 
-
-
 api.add_resource(Conta_cliente, '/dashboard')
 
+
 class Transacao_bancaria(Resource):
+
     def post(self):
+        req = request.json
+
+        conta_logged = req['conta_logged']
+        conta_destinatario = req['conta_destinatario']
+        valor = req['valor']
+
+        if transation(conta_logged, conta_destinatario, valor):
+            return {'message': 'Transação cadastrada com sucesso!'}
+        else:
+            return {'message': 'Erro ao efetuar a transação'}
+
+    def get(self):
 
         req = request.json
 
-        login_user = req['login_user']
-        iban = req['iban']
-        valor = req['valor']
+        conta_logged = req['conta_logged']
+
+        saldo_atual = consulta_saldo(conta_logged)
+
+        return {'message': f'Saldo atual é de {saldo_atual:}€'}
 
 
-
-api.add_resource(Conta_cliente, '/transacao')
+api.add_resource(Transacao_bancaria, '/transacao')
 
 if __name__ == '__main__':
     app.run(debug=True)
+

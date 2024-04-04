@@ -26,12 +26,12 @@ cursor = banco.cursor()
 cursor.execute("CREATE TABLE IF NOT EXISTS transacao ("
                "id NUMERIC AUTO_INCREMENT,"
                "data BLOB NOT NULL,"
-               "iban_emissor TEXT NOT NULL,"
-               "iban_destinatario TEXT NOT NULL,"
+               "conta_emissor TEXT NOT NULL,"
+               "conta_destinatario TEXT NOT NULL,"
                "valor REAL NOT NULL,"
-               "PRIMARY KEY(iban_emissor, iban_destinatario)"
-               "FOREIGN KEY(iban_emissor, iban_destinatario) REFERENCES cliente(conta, iban_destinatario))")
+               "FOREIGN KEY(conta_emissor, conta_destinatario) REFERENCES cliente(conta, conta))")
 
 banco.commit()
 banco.close()
+
 
