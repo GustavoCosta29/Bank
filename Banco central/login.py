@@ -7,6 +7,7 @@ def validar_cadastro(email, senha):
         cursor = banco.cursor()
         cursor.execute("SELECT senha FROM cliente WHERE email = '{}'".format(email))
         senha_user = cursor.fetchall()
+
         banco.close()
 
         if senha == senha_user[0][0]:
@@ -19,13 +20,14 @@ def validar_cadastro(email, senha):
         print("Erro ao validar seus dados")
         return False
 
-
 def alterar_cadastro(email, nova_senha):
     try:
         banco = sqlite3.connect('bancodedados.db')
         cursor = banco.cursor()
+
         cursor.execute(f"UPDATE cliente SET senha = '{nova_senha}' WHERE email = '{email}'")
         banco.commit()
+
         banco.close()
 
         return True

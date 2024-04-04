@@ -1,10 +1,8 @@
 import sqlite3
 import datetime
 
-
 def transation(conta_logged, conta_destinatario, valor):
     try:
-
         saldo_emissor = 0
         saldo_destinatario = 0
         date = datetime.datetime.now()
@@ -12,24 +10,20 @@ def transation(conta_logged, conta_destinatario, valor):
         banco = sqlite3.connect('bancodedados.db')
         cursor = banco.cursor()
 
-        cursor.execute("SELECT saldo, nome FROM contas WHERE conta = ? ",
+        cursor.execute("SELECT saldo FROM contas WHERE conta = ? ",
                        (conta_logged,))
-
         result = cursor.fetchone()
 
         if result:
             saldo_emissor = result[0]
-            nome = result[1]
         else:
             print("Nenhum resultado encontrado.")
 
-        cursor.execute("SELECT saldo, nome FROM contas WHERE conta = ?", (conta_destinatario,))
-
+        cursor.execute("SELECT saldo FROM contas WHERE conta = ?", (conta_destinatario,))
         result_dest = cursor.fetchone()
 
         if result_dest:
             saldo_destinatario = result_dest[0]
-            nome_destinatario = result_dest[1]
 
             if (saldo_emissor - valor) < 0:
                 print("Saldo insuficiente.")
@@ -55,20 +49,15 @@ def transation(conta_logged, conta_destinatario, valor):
         return True
     except Exception as e:
         print(f"Error occurred: {e}")
-    return False
-
+        return False
 
 def consulta_saldo(conta_logged):
-
     try:
-
         banco = sqlite3.connect('bancodedados.db')
         cursor = banco.cursor()
 
         cursor.execute(f"SELECT saldo FROM contas WHERE conta = {conta_logged}")
-
         saldo = cursor.fetchone()[0]
-        print(saldo)
 
         banco.close()
 

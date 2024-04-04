@@ -1,6 +1,5 @@
 from flask import Flask, redirect, url_for, request
 from flask_restful import Resource, Api
-
 from cadastro import registar_cadastro
 from login import validar_cadastro, alterar_cadastro
 from conta import open_account
@@ -14,11 +13,9 @@ api = Api(app)
 
 contribuinte = 0
 
-
 class Banco_login(Resource):
     def post(self):
         req = request.json
-
         email = req['email']
         senha = req['senha']
 
@@ -126,4 +123,3 @@ api.add_resource(Transacao_bancaria, '/transacao')
 
 if __name__ == '__main__':
     app.run(debug=True)
-
