@@ -1,19 +1,19 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, redirect, url_for, request
+from flask_restful import Resource, Api
+
 from cadastro import registar_cadastro
 from login import validar_cadastro, alterar_cadastro
-from flask_restful import Resource, Api
+from conta import open_account
+
+import random
 
 app = Flask(__name__)
 api = Api(app)
 
-
-@app.route('/')
-def home():
-    return render_template('home.html')
+contribuinte = 0
 
 
 class Banco_login(Resource):
-
     def post(self):
         req = request.json
 
@@ -72,10 +72,42 @@ class Banco_registro(Resource):
 api.add_resource(Banco_registro, '/cadastro')
 
 
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html')
+class Conta_cliente(Resource):
+    def post(self):
+        req = request.json
 
+        agencia = '0160'
+        conta = random.randint(1, 999999)
+        iban = ('PT50' + repr(random.randint(1, 999999)))
+        saldo = 0
+        contribuinte_id = req['contribuinte_id']
+
+        if contribuinte_id:
+            account_ok = open_account(agencia, conta, iban, saldo, contribuinte_id)
+            if account_ok:
+                return {"account_open": True}
+            else:
+                return {"account_open": False}
+        else:
+            print('contribuinte não cadastrado')
+
+
+
+
+api.add_resource(Conta_cliente, '/dashboard')
+
+class Transacao_bancaria(Resource):
+    def post(self):
+
+        req = request.json
+
+        login_user = req['login_user']
+        iban = req['iban']
+        valor = req['valor']
+
+
+
+api.add_resource(Conta_cliente, '/transacao')
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,37 @@
+
+
+### Criando tabela de contas ###
+
+
+banco = sqlite3.connect('bancodedados.db')
+cursor = banco.cursor()
+
+cursor.execute('CREATE TABLE IF NOT EXISTS contas ('
+               'agencia NUMERIC NOT NULL,'
+               'conta NUMERIC NOT NULL,'
+               'iban TEXT UNIQUE NOT NULL,'
+               'saldo REAL NOT NULL,'
+               'contribuinte_id NUMERIC NOT NULL,'
+               'PRIMARY KEY(agencia, conta)'
+               'FOREIGN KEY(contribuinte_id) REFERENCES cliente(contribuinte))')
+banco.commit()
+cursor.close()
+
+
+### Criando tabela de transacao ###
+
+banco = sqlite3.connect('bancodedados.db')
+cursor = banco.cursor()
+
+cursor.execute("CREATE TABLE IF NOT EXISTS transacao ("
+               "id NUMERIC AUTO_INCREMENT,"
+               "data BLOB NOT NULL,"
+               "iban_emissor TEXT NOT NULL,"
+               "iban_destinatario TEXT NOT NULL,"
+               "valor REAL NOT NULL,"
+               "PRIMARY KEY(iban_emissor, iban_destinatario)"
+               "FOREIGN KEY(iban_emissor, iban_destinatario) REFERENCES cliente(conta, iban_destinatario))")
+
+banco.commit()
+banco.close()
+
