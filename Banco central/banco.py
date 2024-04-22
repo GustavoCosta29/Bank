@@ -5,6 +5,9 @@ from login import validar_cadastro, alterar_cadastro
 from conta import open_account
 from transacao import transation
 from transacao import consulta_saldo
+from transation_simulator import execute_transactions
+
+
 
 import random
 
@@ -120,6 +123,7 @@ class Transacao_bancaria(Resource):
 
 
 api.add_resource(Transacao_bancaria, '/transacao')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

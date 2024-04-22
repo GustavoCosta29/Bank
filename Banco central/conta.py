@@ -7,12 +7,14 @@ def open_account(agencia, conta, iban, saldo, contribuinte_id):
         banco = sqlite3.connect('bancodedados.db')
         cursor = banco.cursor()
 
-        cursor.execute(f"SELECT nome FROM cliente WHERE contribuinte = '{contribuinte_id}'")
-        nome = cursor.fetchone()[0]
-        cursor.execute("SELECT contribuinte_id FROM contas WHERE contribuinte_id = ?", (contribuinte_id,))
-        contribuinte = cursor.fetchone()
+        cursor.execute(f"SELECT * FROM cliente WHERE contribuinte = '{contribuinte_id}'")
 
-        if contribuinte == None:
+        resultado = cursor.fetchall()
+
+        nome = resultado[0][0]
+        contribuinte = resultado[0][2]
+
+        if contribuinte:
             cursor.execute(
                 f"INSERT INTO contas VALUES ('{agencia}','{conta}','{iban}','{saldo}','{contribuinte_id}','{nome}')")
             banco.commit()
